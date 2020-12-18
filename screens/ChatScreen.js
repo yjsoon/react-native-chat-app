@@ -40,11 +40,21 @@ export default function ChatScreen({ navigation }) {
 
     setMessages([
       {
+        _id: 2,
+        text: "Hello this is someone else",
+        createdAt: new Date(),
+        user: {
+          _id: 14515151,
+          name: "Someone else",
+          avatar: "https://placeimg.com/141/140/any",
+        },
+      },
+      {
         _id: 1,
         text: "Hello developer",
         createdAt: new Date(),
         user: {
-          _id: 2,
+          _id: 2194891849184,
           name: "React Native",
           avatar: "https://placeimg.com/140/140/any",
         },
@@ -58,14 +68,16 @@ export default function ChatScreen({ navigation }) {
     auth.signOut();
   }
 
-  function onSend(newMessages) {
+  function sendMessages(newMessages) {
+    console.log(newMessages);
     setMessages([...newMessages, ...messages]);
   }
 
   return (
     <GiftedChat
       messages={messages}
-      onSend={(newMessages) => onSend(newMessages)}
+      onSend={(newMessages) => sendMessages(newMessages)}
+      renderUsernameOnMessage={true}
       listViewProps={{
         style: {
           backgroundColor: "#666",
