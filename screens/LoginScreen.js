@@ -12,9 +12,21 @@ export default function LoginScreen({ navigation }) {
     <View style={styles.container}>
       <Text style={styles.title}>Chat App</Text>
       <Text style={styles.fieldTitle}>Email</Text>
-      <TextInput style={styles.input} />
+      <TextInput
+        style={styles.input}
+        autoCapitalize="none"
+        autoCompleteType="email"
+        autoCorrect={false}
+        keyboardType="email-address"
+      />
       <Text style={styles.fieldTitle}>Password</Text>
-      <TextInput style={styles.input} />
+      <TextInput
+        style={styles.input}
+        autoCapitalize="none"
+        autoCompleteType="password"
+        autoCorrect={false}
+        secureTextEntry={true}
+      />
       <TouchableOpacity onPress={null} style={styles.loginButton}>
         <Text style={styles.buttonText}>Log in</Text>
       </TouchableOpacity>
@@ -44,6 +56,7 @@ const styles = StyleSheet.create({
     padding: 4,
     height: 36,
     fontSize: 18,
+    backgroundColor: "white",
   },
   loginButton: {
     backgroundColor: "blue",
@@ -51,6 +64,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 18,
     marginTop: 12,
+    marginBottom: 36,
   },
   buttonText: {
     color: "white",
