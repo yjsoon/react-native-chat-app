@@ -8,6 +8,7 @@ import {
   Button,
 } from "react-native";
 import firebase from "../database/firebaseDB";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
 
 const auth = firebase.auth();
 
@@ -21,6 +22,19 @@ export default function ChatScreen({ navigation }) {
       }
     });
 
+    navigation.setOptions({
+      headerRight: () => (
+        <TouchableOpacity onPress={logout}>
+          <MaterialCommunityIcons
+            name="logout"
+            size={20}
+            color="black"
+            style={{ marginRight: 20 }}
+          />
+        </TouchableOpacity>
+      ),
+    });
+
     return unsubscribe;
   }, []);
 
@@ -28,10 +42,5 @@ export default function ChatScreen({ navigation }) {
     auth.signOut();
   }
 
-  return (
-    <View>
-      <Button onPress={logout} title="Logout" />
-      <Text>Hello this is chat</Text>
-    </View>
-  );
+  return <View></View>;
 }
