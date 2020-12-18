@@ -1,4 +1,5 @@
 import React from "react";
+import { useState } from "react";
 import {
   View,
   Text,
@@ -10,6 +11,9 @@ import {
 } from "react-native";
 
 export default function LoginScreen({ navigation }) {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
@@ -21,6 +25,8 @@ export default function LoginScreen({ navigation }) {
           autoCompleteType="email"
           autoCorrect={false}
           keyboardType="email-address"
+          value={email}
+          onChangeText={(input) => setEmail(input)}
         />
         <Text style={styles.fieldTitle}>Password</Text>
         <TextInput
@@ -29,6 +35,8 @@ export default function LoginScreen({ navigation }) {
           autoCompleteType="password"
           autoCorrect={false}
           secureTextEntry={true}
+          value={password}
+          onChangeText={(input) => setPassword(input)}
         />
         <TouchableOpacity onPress={null} style={styles.loginButton}>
           <Text style={styles.buttonText}>Log in</Text>
