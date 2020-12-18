@@ -1,5 +1,5 @@
 import React from "react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -24,7 +24,6 @@ export default function LoginScreen({ navigation }) {
       .signInWithEmailAndPassword(email, password)
       .then((userCredential) => {
         console.log("Signed in!");
-        navigation.navigate("Chat");
       })
       .catch((error) => {
         console.log("Error!");
