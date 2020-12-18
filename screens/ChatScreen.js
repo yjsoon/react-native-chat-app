@@ -11,13 +11,15 @@ import firebase from "../database/firebaseDB";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { GiftedChat } from "react-native-gifted-chat";
 
+const db = firebase.firestore().collection("messages");
 const auth = firebase.auth();
 
 export default function ChatScreen({ navigation }) {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
-    const unsubscribe = auth.onAuthStateChanged((user) => {
+    // This is the listener for authentication
+    const unsubscribeAuth = auth.onAuthStateChanged((user) => {
       if (user) {
         navigation.navigate("Chat");
       } else {
@@ -25,6 +27,7 @@ export default function ChatScreen({ navigation }) {
       }
     });
 
+    // This sets up the top right button
     navigation.setOptions({
       headerRight: () => (
         <TouchableOpacity onPress={logout}>
@@ -38,30 +41,18 @@ export default function ChatScreen({ navigation }) {
       ),
     });
 
-    setMessages([
-      {
-        _id: 2,
-        text: "Hello this is someone else",
-        createdAt: new Date(),
-        user: {
-          _id: 14515151,
-          name: "Someone else",
-          avatar: "https://placeimg.com/141/140/any",
-        },
-      },
-      {
-        _id: 1,
-        text: "Hello developer",
-        createdAt: new Date(),
-        user: {
-          _id: 2194891849184,
-          name: "React Native",
-          avatar: "https://placeimg.com/140/140/any",
-        },
-      },
-    ]);
+    // This loads data from firebase
+    const unsubscribeSnapshot = db
+      .orderBy("createdAt", "desc")
+      .onSnapshot((collectionSnapshot) => {
+        const serverMessages = collectionSnapshot.docs.map((doc) => doc.data());
+        setMessages(serverMessages);
+      });
 
-    return unsubscribe;
+    return () => {
+      unsubscribeAuth();
+      unsubscribeSnapshot();
+    };
   }, []);
 
   function logout() {
@@ -70,7 +61,9 @@ export default function ChatScreen({ navigation }) {
 
   function sendMessages(newMessages) {
     console.log(newMessages);
-    setMessages([...newMessages, ...messages]);
+    const newMessage = newMessages[0];
+    db.add(newMessage);
+    //setMessages([...newMessages, ...messages]);
   }
 
   return (
