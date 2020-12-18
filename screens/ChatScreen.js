@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import {
   View,
   Text,
@@ -9,10 +9,13 @@ import {
 } from "react-native";
 import firebase from "../database/firebaseDB";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { GiftedChat } from "react-native-gifted-chat";
 
 const auth = firebase.auth();
 
 export default function ChatScreen({ navigation }) {
+  const [messages, setMessages] = useState([]);
+
   useEffect(() => {
     const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
@@ -35,6 +38,19 @@ export default function ChatScreen({ navigation }) {
       ),
     });
 
+    setMessages([
+      {
+        _id: 1,
+        text: "Hello developer",
+        createdAt: new Date(),
+        user: {
+          _id: 2,
+          name: "React Native",
+          avatar: "https://placeimg.com/140/140/any",
+        },
+      },
+    ]);
+
     return unsubscribe;
   }, []);
 
@@ -42,5 +58,22 @@ export default function ChatScreen({ navigation }) {
     auth.signOut();
   }
 
-  return <View></View>;
+  function onSend(newMessages) {
+    setMessages([...newMessages, ...messages]);
+  }
+
+  return (
+    <GiftedChat
+      messages={messages}
+      onSend={(newMessages) => onSend(newMessages)}
+      listViewProps={{
+        style: {
+          backgroundColor: "#666",
+        },
+      }}
+      user={{
+        _id: 1,
+      }}
+    />
+  );
 }
