@@ -45,7 +45,15 @@ export default function ChatScreen({ navigation }) {
     const unsubscribeSnapshot = db
       .orderBy("createdAt", "desc")
       .onSnapshot((collectionSnapshot) => {
-        const serverMessages = collectionSnapshot.docs.map((doc) => doc.data());
+        const serverMessages = collectionSnapshot.docs.map((doc) => {
+          const data = doc.data();
+          console.log(data);
+          const returnData = {
+            ...doc.data(),
+            createdAt: new Date(data.createdAt.seconds * 1000), // convert to JS date object
+          };
+          return returnData;
+        });
         setMessages(serverMessages);
       });
 
